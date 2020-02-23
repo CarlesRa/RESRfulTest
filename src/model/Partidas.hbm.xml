@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 14 feb. 2020 17:54:49 by Hibernate Tools 5.2.12.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="juego" dynamic-insert="false" dynamic-update="false" mutable="true" name="model.Partidas" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="Partidas">
+        <id name="idPartida" type="java.lang.Integer">
+            <column name="idPartida"/>
+            <generator class="identity"/>
+        </id>
+        <property generated="never" lazy="false" name="idSession" optimistic-lock="true" type="java.lang.String" unique="false">
+            <column name="idSession"/>
+        </property>
+        <property generated="never" lazy="false" name="jugadorA" optimistic-lock="true" type="java.lang.Integer" unique="false">
+            <column name="jugadorA"/>
+        </property>
+        <property generated="never" lazy="false" name="jugadorB" optimistic-lock="true" type="java.lang.Integer" unique="false">
+            <column name="jugadorB"/>
+        </property>
+        <property generated="never" lazy="false" name="ganador" optimistic-lock="true" type="java.lang.Integer" unique="false">
+            <column name="ganador"/>
+        </property>
+        <property generated="never" lazy="false" name="terminada" optimistic-lock="true" type="java.lang.Boolean" unique="false">
+            <column name="terminada"/>
+        </property>
+        <property generated="never" lazy="false" name="fecha" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="19" name="fecha"/>
+        </property>
+    </class>
+</hibernate-mapping>

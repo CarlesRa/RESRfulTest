@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Api Juego Cartas</title>
+</head>
+<body>
+	<h1>JUGADORES</h1>
+	<p>Ver todos los jugadores:<a href="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/jugadores">Ver</a></p>
+	<h3>Insertar</h3>
+	<form action="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/jugadores"
+		method="POST">
+		<label>NickName:</label> <input type='text' name='nickName'> <br>
+		<label>Email:</label><input type="email" name="email"> <br>
+		<label>Password:</label><input type="password" name="password">
+		<br> <input type="Submit" Value="Enviar">
+	</form>
+	
+	<h3>Modificar</h3>
+		
+	<form action="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/jugadores"
+			method="PUT">
+		<label>ID:</label> <input type='number' name='nickName'> <br>
+		<label>NickName:</label> <input type="text" name="nickName" >
+		<br> <label>Email:</label><input type="email" name="email">
+		<br> <label>Ganadas:</label> <input type='number' name="ganadas">
+		<br> <label>Empatadas:</label> <input type='number'name="empatadas">
+		<br> <label>Perdidas:</label> <input type='number' name="perdidas"> 
+		<br> <input type="Submit" Value="Modificar">
+	</form>
+	
+	<h3>Borrar</h3>
+	
+	<form action="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/jugadores"
+			method="DELETE">
+		<label>ID:</label> <input type='number' name='idJugador'> <br>
+		<br> <input type="Submit" Value="Borrar">
+	</form>
+</body>
+</html>
