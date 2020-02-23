@@ -58,10 +58,11 @@ public class CrudApi {
 			@QueryParam("ganadas")int ganadas, @FormParam("empatadas")int empatadas,
 			@QueryParam("perdidas")int perdidas) {
 		manager = GameManager.getInstance();
-		String message = manager.modificarJugador(idJugador, nickName, email, passwd, ganadas, empatadas, perdidas);
+		String messages = manager.modificarJugador(idJugador, nickName, email, passwd, ganadas, empatadas, perdidas);
 		return Response.status(Response.Status.OK)
-				.entity(message)
+				.entity(messages)
 				.build();
+		//
 	}
 	
 	@DELETE
