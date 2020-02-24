@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+
+import javax.ws.rs.FormParam;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -380,7 +383,7 @@ public class GameManager {
 		query = session.createQuery("from Jugadores where idJugador = :idJugador");
 		query.setParameter("idJugador", id);
 		List<?>jugadorA = query.getResultList();
-		if( jugadorA != null) {
+		if( jugadorA.size() > 0) {
 			transaction = session.beginTransaction();
 			jugador = (Jugadores)jugadorA.get(0);
 			session.update(jugador);
@@ -480,5 +483,124 @@ public class GameManager {
 		Query q = session.createQuery("from Cartas order by rondasGanadas desc");
 		cartas = (ArrayList<Cartas>)q.getResultList();
 		return g.toJson(cartas);
+	}
+	
+	public String insertarCarta(String marca, String modelo, String pais, float motor, 
+			int potencia, int cilindros, int velocidad, int revoluciones, float consumo, int rondasG) {
+		Gson g = new Gson();
+		sFactory = HibernateUtil.getSessionFactory();
+		Cartas carta = new Cartas(marca, modelo,pais,motor,potencia,cilindros,velocidad,
+				revoluciones, consumo, rondasG);
+		session = sFactory.openSession();
+		transaction = session.beginTransaction();
+		session.save(carta);
+		transaction.commit();
+		session.close();
+		return g.toJson(carta);
+	}
+	
+	public String modificarCarta(int id, String marca, String modelo, String pais, float motor, 
+			int potencia, int cilindros, int velocidad, int revoluciones, float consumo, int rondasG) {
+		Gson g = new Gson();
+		Cartas carta;
+		sFactory = HibernateUtil.getSessionFactory();
+		session = sFactory.openSession();
+		transaction = session.beginTransaction();
+		Query q = session.createQuery("from Cartas where idCarta= :idCarta");
+		q.setParameter("idCarta", id);
+		carta =(Cartas) q.getResultList();
+		carta.setMarca(marca);
+		carta.setModelo(modelo);
+		carta.setPais(pais);
+		carta.setMotor(motor);
+		carta.setPotenciaKv(potencia);
+		carta.setNumCilindros(cilindros);
+		carta.setVelocidad(velocidad);
+		carta.setRevoluciones(revoluciones);
+		carta.setConsumo(consumo);
+		carta.setRondasGanadas(rondasG);
+		session.update(carta);
+		transaction.commit();
+		session.close();
+		return g.toJson(carta);
+	}
+	
+	public String borrarCarta(int idCarta) {
+		Cartas carta;
+		Gson g = new Gson();
+		sFactory = HibernateUtil.getSessionFactory();
+		session = sFactory.openSession();
+		Query<?> query;
+		query = session.createQuery("from Cartas where idCarta = :idCarta");
+		query.setParameter("idCarta", idCarta);
+		carta = (Cartas)query.getResultList();
+		session.delete(carta);
+		return g.toJson(carta);
+	}
+	
+	public String getPartidas() {
+		Gson g = new Gson();
+		ArrayList<Partidas> partidas;
+		sFactory = HibernateUtil.getSessionFactory();
+		session = sFactory.openSession();
+		transaction = session.beginTransaction();
+		Query<?> query;
+		query = session.createQuery("from Partidas");
+		partidas = (ArrayList<Partidas>)query.getResultList();
+		transaction.commit();
+		session.close();
+		return g.toJson(partidas);
+	}
+	
+	public String insertarPartida(String idSession, int jugadorA,
+			int jugadorB,int ganador, boolean terminada,Date fecha) {
+		Gson g = new Gson();
+		Partidas partida = new Partidas(idSession, jugadorA, jugadorB,
+				ganador, terminada, fecha);
+		sFactory = HibernateUtil.getSessionFactory();
+		session = sFactory.openSession();
+		transaction = session.beginTransaction();
+		session.save(partida);
+		transaction.commit();
+		session.close();
+		return g.toJson(partida);
+	}
+	
+	public String modificarPartida(int idPartida, String idSession, int jugadorA,
+			int jugadorB,int ganador, boolean terminada,Date fecha) {
+		Gson g = new Gson();
+		Partidas partida;
+		sFactory = HibernateUtil.getSessionFactory();
+		session = sFactory.openSession();
+		transaction = session.beginTransaction();
+		Query<?> query;
+		query = session.createQuery("from Partidas where idPartida= :idPartida");
+		query.setParameter("idPartida", idPartida);
+		partida = (Partidas)query.getResultList();
+		partida.setIdSession(idSession);
+		partida.setJugadorA(jugadorA);
+		partida.setJugadorB(jugadorB);
+		partida.setTerminada(terminada);
+		partida.setGanador(ganador);
+		partida.setFecha(fecha);
+		session.update(partida);
+		transaction.commit();
+		session.close();
+		return g.toJson(partida);
+	}
+	public String borrarPartida(int idPartida) {
+		Gson g = new Gson();
+		Partidas partida;
+		sFactory = HibernateUtil.getSessionFactory();
+		session = sFactory.openSession();
+		transaction = session.beginTransaction();
+		Query<?> query;
+		query = session.createQuery("from Partidas where idPartida= :idPartida");
+		query.setParameter("idPartida", idPartida);
+		partida = (Partidas)query.getResultList();
+		session.delete(partida);
+		transaction.commit();
+		session.close();
+		return g.toJson(partida);
 	}
 }

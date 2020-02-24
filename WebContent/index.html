@@ -6,7 +6,10 @@
 <title>Api Juego Cartas</title>
 </head>
 <body>
+<h1>AutoCartas <img src="./autocartas.jpg" width="80"
+     height="80"></h1>
 	<h1>JUGADORES</h1>
+	<h3>Ver</h3>
 	<p>Ver todos los jugadores:<a href="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/jugadores">Ver</a></p>
 	<h3>Insertar</h3>
 	<form action="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/jugadores"
@@ -34,8 +37,92 @@
 	
 	<form action="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/jugadores"
 			method="DELETE">
-		<label>ID:</label> <input type='number' name='idJugador'> <br>
-		<br> <input type="Submit" Value="Borrar">
+		<label>ID:</label> <input type='number' name='idJugador'>
+		<input type="Submit" Value="Borrar">
 	</form>
-</body>
+	
+	<h1>CARTAS</h1>
+	
+	<h3>Ver</h3>
+	
+	<p>Ver todas las cartas:<a href="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/cartas">Ver</a></p>
+	
+	<h3>Insertar</h3>
+	
+	<form action="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/cartas"
+			method="POST">
+		<label>Marca:</label> <input type='tetx' name='marca'> <br>
+		<label>Modelo:</label> <input type="text" name="modelo" >
+		<br> <label>Pais:</label><input type="text" name="pais">
+		<br> <label>Motor:</label> <input type='number' name="motor">
+		<br> <label>Potencia:</label> <input type='number'name="potencia">
+		<br> <label>Cilindros:</label> <input type='number' name="numCilindros"> 
+		<br> <label>Velocidad:</label><input type="number" name="velocidad">
+		<br> <label>Revoluciones:</label> <input type='number' name="revoluciones">
+		<br> <label>Potencia:</label> <input type='number'name="potencia">
+		<br> <label>Consumo:</label> <input type='number' name="consumo"> 
+		<br> <label>Rondas ganadas:</label> <input type='number' name="rondasGanadas"> 
+		<br> <input type="Submit" Value="Insertar">
+	</form>
+	
+	<h3>Modificar</h3>
+	
+	<form action="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/cartas"
+			method="PUT">
+		<label>ID:</label> <input type='number'name="idCarta"><br>
+		<label>Marca:</label> <input type='tetx' name='marca'> <br>
+		<label>Modelo:</label> <input type="text" name="modelo" >
+		<br> <label>Pais:</label><input type="text" name="pais">
+		<br> <label>Motor:</label> <input type='number' name="motor">
+		<br> <label>Potencia:</label> <input type='number'name="potencia">
+		<br> <label>Cilindros:</label> <input type='number' name="numCilindros"> 
+		<br> <label>Velocidad:</label><input type="number" name="velocidad">
+		<br> <label>Revoluciones:</label> <input type='number' name="revoluciones">
+		<br> <label>Potencia:</label> <input type='number'name="potencia">
+		<br> <label>Consumo:</label> <input type='number' name="consumo"> 
+		<br> <label>Rondas ganadas:</label> <input type='number' name="rondasGanadas"> 
+		<br> <input type="Submit" Value="Modificar">
+	</form>
+	<h3>Borrar</h3>
+	
+	<form action="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/cartas"
+			method="DELETE">
+		<label>ID:</label> <input type='number' name='idJugador'>
+		<input type="Submit" Value="Borrar">
+	</form>
+	</body>
+	<h1>PARTIDAS</h1>
+	<p>Ver todas las partidas:<a href="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/partidas">Ver</a></p>
+	<h3>Insertar</h3>
+	<form action="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/partidas"
+			method="POST">
+		<label>idSession:</label> <input type='text'name="idSession"><br>
+		<label>JugadorA:</label> <input type='number' name='jugadorA'> <br>
+		<label>JugadorB:</label> <input type="number" name="jugadorB" >
+		<br> <label>Ganador:</label><input type="number" name="pais">
+		<br> <label>Terminada:</label> <input type=checkbox name="terminada">
+		<br> <label>Fecha:</label> <input type='datetime-local'name="fecha">
+		<br> <input type="Submit" Value="Insertar">
+	</form>
+	<h3>Modificar</h3>
+	<form action="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/partidas"
+			method="PUT">
+		<label>idPartida:</label> <input type='number'name="idPartida"><br>
+		<label>idSession:</label> <input type='text'name="idSession"><br>
+		<label>JugadorA:</label> <input type='number' name='jugadorA'> <br>
+		<label>JugadorB:</label> <input type="number" name="jugadorB" >
+		<br> <label>Ganador:</label><input type="number" name="pais">
+		<br> <label>Terminada:</label> <input type=checkbox name="terminada">
+		<br> <label>Fecha:</label> <input type='datetime-local'name="fecha">
+		<br> <input type="Submit" Value="Modificar">
+	</form>
+	<h3>Borrar</h3>
+	
+	<form action="http://127.0.0.1:8080/ApiJuegoDef/rest/crud/partidas"
+			method="DELETE">
+		<label>ID:</label> <input type='number' name='idPartida'>
+		<input type="Submit" Value="Borrar">
+	</form>
+	
+	
 </html>

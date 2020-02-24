@@ -1,5 +1,7 @@
 package com.carlesramos.services;
 
+import java.util.Date;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -75,5 +77,112 @@ public class CrudApi {
 		return Response.status(Response.Status.OK)
 				.entity(message)
 				.build();
+	}
+	
+	@GET
+	@Path("/cartas")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCartas() {
+		manager = GameManager.getInstance();
+		String message = manager.getClasificacionCartas();
+		return Response.status(Response.Status.OK)
+				.entity(message)
+				.build();
+	}
+	
+	@POST
+	@Path("/cartas")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response insertarCarta(@FormParam("marca")String marca, @FormParam("modelo")String modelo,
+			@FormParam("pais")String pais, @FormParam("motor")float motor, 
+			@FormParam("potencia")int potencia, @FormParam("cilindros")int cilindros, @FormParam("velocidad")int velocidad,
+			@FormParam("revoluciones")int revoluciones, @FormParam("consumo")float consumo, @FormParam("rondasGanadas")int rondasG) {
+		manager = GameManager.getInstance();
+		String response = manager.insertarCarta(marca, modelo, pais, motor, potencia,
+				cilindros, velocidad, revoluciones, consumo, rondasG);
+		return Response.status(Response.Status.OK)
+				.entity(response)
+				.build();
+	}
+	
+	@PUT
+	@Path("/cartas")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response modificarCarta(@QueryParam("idCarta")int idCarta,@QueryParam("marca")String marca, @QueryParam("modelo")String modelo,
+			@QueryParam("pais")String pais, @QueryParam("motor")float motor, 
+			@QueryParam("potencia")int potencia, @QueryParam("cilindros")int cilindros, @QueryParam("velocidad")int velocidad,
+			@QueryParam("revoluciones")int revoluciones, @QueryParam("consumo")float consumo, @QueryParam("rondasGanadas")int rondasG) {
+		manager = GameManager.getInstance();
+		String response = manager.insertarCarta(marca, modelo, pais, motor, potencia,
+				cilindros, velocidad, revoluciones, consumo, rondasG);
+		return Response.status(Response.Status.OK)
+				.entity(response)
+				.build();
+	}
+	
+	@DELETE
+	@Path("/cartas")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response borrarCarta(@QueryParam("idCarta")int idCarta) {
+		manager = GameManager.getInstance();
+		String response = manager.borrarCarta(idCarta);
+		return Response.status(Response.Status.OK)
+				.entity(response)
+				.build();	
+	}
+	
+	@GET
+	@Path("/partidas")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPartidas() {
+		manager = GameManager.getInstance();
+		String response = manager.getPartidas();
+		return Response.status(Response.Status.OK)
+				.entity(response)
+				.build();	
+	}
+	
+	@POST
+	@Path("/partidas")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response insertarPartida(@FormParam("idSession")String idSession, @FormParam("jugadorA")int jugadorA,
+			@FormParam("jugadorB")int jugadorB, @FormParam("ganador")int ganador, 
+			@FormParam("terminada")boolean terminada, @FormParam("fecha")Date fecha) {
+		
+		String response = manager.insertarPartida(idSession, jugadorA, jugadorB, ganador, terminada, fecha);
+		return Response.status(Response.Status.OK)
+				.entity(response)
+				.build();	
+	}
+	
+	@PUT
+	@Path("/partidas")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response modificarPartida(@QueryParam("idPartida")int idPartida,@QueryParam("idSession")String idSession, 
+			@QueryParam("jugadorA")int jugadorA,
+			@QueryParam("jugadorB")int jugadorB, @QueryParam("ganador")int ganador, 
+			@QueryParam("terminada")boolean terminada, @QueryParam("fecha")Date fecha) {
+		manager = GameManager.getInstance();
+		String response = manager.modificarPartida(idPartida, idSession, jugadorA, jugadorB, ganador, terminada, fecha);
+		return Response.status(Response.Status.OK)
+				.entity(response)
+				.build();	
+		
+	}
+	@DELETE
+	@Path("/partidas")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response borrarPartida(@QueryParam("idPartida")int idPartida) {
+		manager = GameManager.getInstance();
+		String response = manager.borrarPartida(idPartida);
+		return Response.status(Response.Status.OK)
+				.entity(response)
+				.build();	
 	}
 }
