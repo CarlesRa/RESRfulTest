@@ -18,6 +18,12 @@ import model.Cartas;
 import model.Jugadores;
 import model.Partidas;
 
+/**
+ * 
+ * @author Juan Carlos Ramos
+ * Clase encargada de manejar la lógica del juego
+ *
+ */
 public class GameManager {
 	
 	enum Caracteristicas {
@@ -50,6 +56,8 @@ public class GameManager {
 	private Jugadores jugador2;
 	private Partidas partida;
 	private Random rnd;
+	private int ganadasCPU;
+	private int ganadasPlayer;
 		
 	private GameManager() {
 		cartasCPU = new ArrayList<>();
@@ -92,7 +100,11 @@ public class GameManager {
 	//METODES PER COMPROVAR EL TRANSCURS DEL JOC
 	
 	
-
+	/**
+	 *Comprueba si existe el nickName en la base de datos.
+	 * @param nickName
+	 * @return si existe o no.
+	 */
 	public boolean nickNameExists(String nickName) {
 		Gson g = new Gson();
 		sFactory = HibernateUtil.getSessionFactory();
@@ -106,6 +118,12 @@ public class GameManager {
 		else return true;
 	}
 	
+	/**
+	 * Valida si el usuario se encuentra en la base de datos
+	 * @param nickName
+	 * @param password
+	 * @return true o false
+	 */
 	public String validarLogin(String nickName, String password) {
 		Gson g = new Gson();
 		String sha1 = Lib.obtenerSHA1(nickName, password);
@@ -126,6 +144,12 @@ public class GameManager {
 		else return g.toJson(LOGIN_FAIL);
 	}
 	
+	/**
+	 * inicia una nueva partida
+	 * @param idSession
+	 * @param idCliente
+	 * @return retorna un objeto NuevaPartida
+	 */
 	public String nuevaPartida(String idSession, int idCliente) {
 		
 		Partidas partida;
@@ -169,11 +193,16 @@ public class GameManager {
 		List<?>partidas = query.getResultList();
 		partida = (Partidas)partidas.get(0);
 		session.close();
+		System.out.println(partida.getIdPartida());
 		//cree el objecte nova partida
 		nuevaPartida = new NuevaPartida(cartasCliente, partida.getIdPartida(), 1);
 		return g.toJson(nuevaPartida);
 	}
 	
+	/**
+	 * Inicia una jugada de la cpu
+	 * @return la carta seleccionada y la característica a jugar.
+	 */
 	public String jugarCpu() {
 		Gson g = new Gson();
 		int posCarta = rnd.nextInt(cartasCPU.size());
@@ -181,14 +210,22 @@ public class GameManager {
 		cartasCPU.remove(posCarta);
 		String caracteristica = Caracteristicas.values()
 				[rnd.nextInt(Caracteristicas.values().length)].toString();
-		JugadaCpu jugadaCpu = new JugadaCpu(carta, caracteristica);
+		JugadaCpu jugadaCpu = new JugadaCpu(carta, caracteristica, ganadasCPU, ganadasPlayer);
 		return g.toJson(jugadaCpu);
 	}
 
+	/**
+	 * Comprueba una jugada
+	 * @param idPartida
+	 * @param idCartaA
+	 * @param caracteristica
+	 * @param idCartaB
+	 * @return El resultado de la jugada.
+	 */
 	public String comprobarJugada(String idPartida, int idCartaA, String caracteristica,
 			int idCartaB) {
+		
 		int resultado = -1;
-		int idCartaCpu;
 		String caracteristicaCpu;
 		sFactory = HibernateUtil.getSessionFactory();
 		session = sFactory.openSession();
@@ -199,6 +236,7 @@ public class GameManager {
 		List<?>cartasA = query.getResultList();
 		if (cartasA != null) {
 			cartaA = (Cartas)cartasA.get(0);
+			
 		}
 		else return "-1";
 
@@ -207,13 +245,15 @@ public class GameManager {
 		query.setParameter("idCarta", idCartaB);
 		List<?>cartasB = query.getResultList();
 		if (cartasB != null) {
-			cartaB = (Cartas)cartasA.get(0);
+			cartaB = (Cartas)cartasB.get(0);
+			
 		}
 		else return "-1";
 
 		//Comprove la jugada segons el atribut seleccionat
 		switch (caracteristica) {
 			case "Motor" : {
+				
 				if (cartaA.getMotor() < cartaB.getMotor()) {
 					resultado = JUGADOR_2;
 				}
@@ -224,6 +264,7 @@ public class GameManager {
 			break;
 			}
 			case "Potencia" : {
+				
 				if (cartaA.getPotenciaKv() < cartaB.getPotenciaKv()) {
 					resultado = JUGADOR_2;
 				}
@@ -234,6 +275,7 @@ public class GameManager {
 			break;
 			}
 			case "Velocidad" : {
+				
 				if (cartaA.getVelocidad() < cartaB.getVelocidad()) {
 					resultado = JUGADOR_2;
 				}
@@ -244,6 +286,7 @@ public class GameManager {
 			break;
 			}
 			case "Cilindros" : {
+				
 				if (cartaA.getNumCilindros() < cartaB.getNumCilindros()) {
 					resultado = JUGADOR_2;
 				}
@@ -254,6 +297,7 @@ public class GameManager {
 				break;
 			}
 			case "Revoluciones" : {
+			
 				if (cartaA.getRevoluciones() < cartaB.getRevoluciones()) {
 					resultado = JUGADOR_1;
 				}
@@ -264,6 +308,7 @@ public class GameManager {
 				break;
 			}
 			case "Consumo" : {
+				
 				if (cartaA.getConsumo() < cartaB.getConsumo()) {
 					resultado = JUGADOR_1;
 				}
@@ -280,10 +325,14 @@ public class GameManager {
 		if (resultado == JUGADOR_1) {
 			cartaA.setRondasGanadas(cartaA.getRondasGanadas() + 1);
 			session.update(cartaA);
+			ganadasCPU++;
+			
 		}
 		else if (resultado == JUGADOR_2) {
 			cartaB.setRondasGanadas(cartaB.getRondasGanadas() + 1);
 			session.update(cartaB);
+			ganadasPlayer++;
+	
 		}
 		transaction.commit();
 
@@ -291,9 +340,17 @@ public class GameManager {
 		return String.valueOf(resultado);
 	}
 	
-	
-	public int resultadoPartida(int idSession,int idJugadorA, int numVictoriasJugadorA,
-			int idJugadorB, int numVictoriasJugadorB) {
+	/**
+	 * Comprueba el resultado de la partida
+	 * @param idPartida
+	 * @param idJugadorB
+	 * @return El id del ganador.
+	 */
+	public int resultadoPartida(int idPartida, int idJugadorA, int idJugadorB) {
+		int resultado = -1;
+		sFactory = HibernateUtil.getSessionFactory();
+		session = sFactory.openSession();
+		transaction = session.beginTransaction();
 		Query<?> query;
 		query = session.createQuery("from Jugadores where idJugador = :idJugador");
 		query.setParameter("idJugador", idJugadorA);
@@ -301,54 +358,64 @@ public class GameManager {
 		if (jugadorA != null) {
 			jugador1 = (Jugadores)jugadorA.get(0);
 		}	
-
 		query = session.createQuery("from Jugadores where idJugador = :idJugador");
 		query.setParameter("idJugador", idJugadorB);
 		List<?>jugadorB = query.getResultList();
 		if (jugadorB != null) {
-			jugador2 = (Jugadores)jugadorA.get(0);
+			jugador2 = (Jugadores)jugadorB.get(0);
 		}	
 
-		query = session.createQuery("from Partidas where idSession = :idSession");
-		query.setParameter("idSession", idSession);
+		query = session.createQuery("from Partidas where idPartida = :idPartida");
+		query.setParameter("idPartida", partida);
 		List<?>p = query.getResultList();
-		if (p != null) {
+		/*if (p != null) {
 			partida = (Partidas)p.get(0);
-		}
+		}*/
 
-		if (numVictoriasJugadorA > numVictoriasJugadorB) {
+		if (ganadasCPU > ganadasPlayer) {
 
 			if (jugadorA != null) {
 				jugador1.setGanadas(jugador1.getGanadas() + 1);
-				partida.setGanador(jugador1.getIdJugador());
+				/*partida.setGanador(jugador1.getIdJugador());
 				session.update(jugador1);
 				session.update(partida);
 				transaction.commit();
-				session.close();
-				return JUGADOR_1;
+				session.close();*/
+				resultado = JUGADOR_1;
 			}
 		}
-		else if(numVictoriasJugadorA == numVictoriasJugadorB) {
-			jugador1.setEmpatadas(jugador1.getEmpatadas() + 1);
+		else if(ganadasCPU == ganadasPlayer) {
+			/*jugador1.setEmpatadas(jugador1.getEmpatadas() + 1);
 			jugador2.setEmpatadas(jugador2.getEmpatadas() + 1);
 			session.update(jugador1);
 			session.update(jugador2);
 			transaction.commit();
-			session.close();
-			return EMPATE;
+			session.close();*/
+			resultado = EMPATE;
 		}
 		else {
-			jugador2.setGanadas(jugador2.getGanadas() + 1);
+			/*jugador2.setGanadas(jugador2.getGanadas() + 1);
 			partida.setGanador(jugador2.getIdJugador());
 			session.update(jugador2);
 			session.update(partida);
 			transaction.commit();
 			session.close();
-			return JUGADOR_2;
+			ganadasCPU = 0;
+			ganadasPlayer = 0;*/
+			resultado = JUGADOR_2;
 		}
-		return ERROR;
+		transaction.commit();
+		session.close();
+		ganadasCPU = 0;
+		ganadasPlayer = 0;
+		return resultado;
 	}
 	
+	/**
+	 *Inserta un nuevo jugador en la base de datos
+	 * @param jugador json de un jugador
+	 * @return si se ha insertado correctamente o no
+	 */
 	public String insertarJugador(String jugador) {
 		Gson g = new Gson();
 		Jugadores j = g.fromJson(jugador, Jugadores.class);
@@ -432,6 +499,10 @@ public class GameManager {
 		return " ";
 	}
 	
+	/**
+	 * Inserta una carta en la base de datos.
+	 * @param jsonCarta
+	 */
 	public void insertarCarta(String jsonCarta) {
 		sFactory = HibernateUtil.getSessionFactory();
 		session = sFactory.openSession();
@@ -442,6 +513,7 @@ public class GameManager {
 		transaction.commit();
 		session.close();
 	}
+	
 	
 	public ArrayList<Cartas> getCartasJuego(ArrayList<Cartas>cartas){
 		
@@ -464,6 +536,10 @@ public class GameManager {
 		return carta;
 	}
 	
+	/**
+	 * Muestra una lista de todos los jugadores
+	 * @return Lista de todos los jugadores ordenada por puntuación
+	 */
 	public String getClasificacion() {
 		Gson g = new Gson();
 		ArrayList<Jugadores> jugadores;
@@ -475,6 +551,10 @@ public class GameManager {
 		return g.toJson(jugadores);
 	}
 	
+	/**
+	 * Muestra todas las cartas
+	 * @return Lista de todas las cartas ordenadas por puntuación
+	 */
 	public String getClasificacionCartas() {
 		Gson g = new Gson();
 		ArrayList<Cartas> cartas;
@@ -485,6 +565,10 @@ public class GameManager {
 		return g.toJson(cartas);
 	}
 	
+	/**
+	 * Inserta una carta en la base de datos.
+	 * @param jsonCarta
+	 */
 	public String insertarCarta(String marca, String modelo, String pais, float motor, 
 			int potencia, int cilindros, int velocidad, int revoluciones, float consumo, int rondasG) {
 		Gson g = new Gson();
@@ -537,6 +621,7 @@ public class GameManager {
 		session.delete(carta);
 		return g.toJson(carta);
 	}
+	
 	
 	public String getPartidas() {
 		Gson g = new Gson();

@@ -1,5 +1,12 @@
 package com.carlesramos.utilities;
 
+/**
+ * 
+ * @author Juan Carlos Ramos
+ * Clase encargada de almacenar los datos de la validación
+ * del login.
+ *
+ */
 public class ValidarLogin {
 	
 	private String idSession;

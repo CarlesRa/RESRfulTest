@@ -2,14 +2,24 @@ package com.carlesramos.utilities;
 
 import model.Cartas;
 
+/**
+ * 
+ * @author Juan Carlos Ramos
+ * Clase encargada de almacenar los datos de jugada de la CPU
+ *
+ */
 public class JugadaCpu {
 	private Cartas carta;
 	private String caracteristica;
+	private int ganadasCPU;
+	private int ganadasPlayer;
 	
-	public JugadaCpu(Cartas carta, String caracteristica) {
+	public JugadaCpu(Cartas carta, String caracteristica, int ganadasCPU, int ganadasPlayer) {
 		super();
 		this.carta = carta;
 		this.caracteristica = caracteristica;
+		this.ganadasCPU = ganadasCPU;
+		this.ganadasPlayer = ganadasPlayer;
 	}
 
 	public Cartas getCarta() {

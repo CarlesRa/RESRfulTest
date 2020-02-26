@@ -56,15 +56,14 @@ public class CrudApi {
 	@Path("/jugadores")
 	public Response modificarJugador(@QueryParam("idJugador")int idJugador, 
 			@QueryParam("nickName")String nickName,
-			@QueryParam("email")String email, @FormParam("password")String passwd,
-			@QueryParam("ganadas")int ganadas, @FormParam("empatadas")int empatadas,
+			@QueryParam("email")String email, @QueryParam("password")String passwd,
+			@QueryParam("ganadas")int ganadas, @QueryParam("empatadas")int empatadas,
 			@QueryParam("perdidas")int perdidas) {
 		manager = GameManager.getInstance();
 		String messages = manager.modificarJugador(idJugador, nickName, email, passwd, ganadas, empatadas, perdidas);
 		return Response.status(Response.Status.OK)
 				.entity(messages)
 				.build();
-		//
 	}
 	
 	@DELETE
@@ -78,6 +77,8 @@ public class CrudApi {
 				.entity(message)
 				.build();
 	}
+	
+	//CARTAS
 	
 	@GET
 	@Path("/cartas")
@@ -133,6 +134,8 @@ public class CrudApi {
 				.entity(response)
 				.build();	
 	}
+	
+	//PARTIDAS
 	
 	@GET
 	@Path("/partidas")

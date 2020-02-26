@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import model.Cartas;
 
+/**
+ * 
+ * @author Juan Carlos Ramos
+ * Clase encargada de almacenar los datos de una nueva partida
+ *
+ */
 public class NuevaPartida {
 	private ArrayList<Cartas> cartasCliente;
 	private int idPartida;

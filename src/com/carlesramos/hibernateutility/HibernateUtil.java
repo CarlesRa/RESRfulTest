@@ -4,6 +4,12 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+/**
+ * 
+ * @author Juan Carlos Ramos
+ * Clase encargada de crear el sessionFactory de Hibernate
+ *
+ */
 public class HibernateUtil {
 	
 	private static final SessionFactory sessionFactory = buildSessionFactory();
@@ -21,12 +27,6 @@ public class HibernateUtil {
 			return sessionFactory; 
 		}
 		
-		/*
-		 * Configuration configuration = new Configuration().configure();
-StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().
-applySettings(configuration.getProperties());
-SessionFactory factory = configuration.buildSessionFactory(builder.build());
-		 * */
 }
 
 

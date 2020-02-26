@@ -5,6 +5,12 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * 
+ * @author Juan Carlos Ramos
+ * Clase encargada de generar una contraseña sha1
+ *
+ */
 public class Lib {
 	public static String obtenerSHA1(String nickName, String password) {
 		String sha1 = null;
